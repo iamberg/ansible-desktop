@@ -40,9 +40,15 @@ USER_STRING = '{"users": [{"username": "$(shell whoami)", "skip_zshrc": true}]}'
 
 # Main Ansible Playbook Command (prompts for password)
 INSTALL_ANSIBLE_ROLES = ansible-galaxy install -r requirements.yml
-ANSIBLE_PLAYBOOK = ansible-playbook desktop.yml -v -i $(INVENTORY) -l $(HOSTNAME) -e $(USER_STRING)
+DESKTOP_PLAYBOOK_FILE = desktop.yml
+ANSIBLE_PLAYBOOK = ansible-playbook $(DESKTOP_PLAYBOOK_FILE) -v -i $(INVENTORY) -l $(HOSTNAME) -e $(USER_STRING)
+
+WSL_PLAYBOOK_FILE = wsl.yml
+WSL_ANSIBLE_PLAYBOOK = ansible-playbook $(WSL_PLAYBOOK_FILE) -v -i $(INVENTORY) -l $(HOSTNAME) -e $(USER_STRING)
 
 ANSIBLE = $(INSTALL_ANSIBLE_ROLES) && $(ANSIBLE_PLAYBOOK) --ask-become-pass
+
+WSL_ANSIBLE = $(INSTALL_ANSIBLE_ROLES) && $(WSL_ANSIBLE_PLAYBOOK) --ask-become-pass
 
 # Travis CI Ansible Playbook Command (doesn't prompt for password)
 TRAVIS = travis
@@ -100,17 +106,28 @@ bootstrap-check: ## Check that PATH and requirements are correct
 	@python3 -m pip list | grep psutil
 
 check: DARGS?=
-check: ## Checks personal-computer.yml playbook
+check: ## Checks desktop.yml playbook
 	@$(ANSIBLE) --check
 
 install: DARGS?=
-install: ## Installs everything via personal-computer.yml playbook
+install: ## Installs everything via desktop.yml playbook
 	@$(ANSIBLE) --skip-tags="ticktick, nautilus-mounts"
 	# ticktick doesn't work on fresh install for some reason
 	# no planned test coverage to nautilus-mounts as it deals with file mounts
 
+wsl-install: DARGS?=
+wsl-install: ## Installs everything via wsl.yml playbook
+	@$(WSL_ANSIBLE)
+
 all: ## Does most eveything with Ansible and Make targets
 all: bootstrap bootstrap-check install non-ansible
+
+wsl: ## Does most everything, like above, but for wsl
+wsl: bootstrap bootstrap-check wsl-install
+
+	# Ubuntu 20.04 defaults
+	make python-three-eight-install
+	make python-three-eight-supporting
 
 non-ansible:
 non-ansible: ## Runs all non-ansible make targets for fresh install (all target)

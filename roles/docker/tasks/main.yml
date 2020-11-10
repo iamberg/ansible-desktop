@@ -62,6 +62,7 @@
   service:
     name: "docker"
     enabled: "yes"
+  failed_when: false # wsl service name is TBD?
 
 - name: Docker - Check current docker-compose version.
   command: docker-compose --version

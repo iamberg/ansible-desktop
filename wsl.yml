@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+  roles:
+    - {role: iancleary.zsh_antibody, tags: ['zsh']}
+    - {role: yadm, tags: ['yadm']}
+    - {role: docker, tags: ['docker']}
+    - {role: yarn, tags: ['nodejs', 'yarn']}
+    - {role: github-cli, tags: ['github-cli']}
