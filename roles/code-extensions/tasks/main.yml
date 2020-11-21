@@ -1,0 +1,19 @@
+---
+- name: Register code current path
+  shell: which code
+  register: path_to_code_executable
+  changed_when: "false"
+
+- name: Register currently installed code extensions
+  shell: "{{ path_to_code_executable.stdout }} --list-extensions"
+  register: installed_code_extensions
+  changed_when: "false"
+
+- name: Debug currently installed code extensions
+  debug:
+    var: installed_code_extensions.stdout_lines
+
+- name: Code Extensions
+  shell: "{{ path_to_code_executable.stdout }} --install-extension {{ item }}"
+  with_items: "{{ code_extensions }}"
+  when: "item not in installed_code_extensions.stdout_lines"

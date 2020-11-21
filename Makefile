@@ -220,6 +220,10 @@ chat-clients:
 chat-clients: ## Install Chat Client Snaps
 	@$(ANSIBLE) --tags="chat-clients"
 
+code-extensions:
+code-extensions: ## Install VS Code extensions
+	@$(ANSIBLE) --tags="code-extensions"
+
 development-tools:
 development-tools: ## Install VS Code, Postman, and Sublime Text Snaps
 	@$(ANSIBLE) --tags="development-tools"

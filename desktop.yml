@@ -19,6 +19,7 @@
     - {role: chat-clients, tags: ['chat-clients']}
     - {role: web-browsers, tags: ['web-browsers']}
     - {role: development-tools, tags: ['development-tools']}
+    - {role: code-extensions, tags: ['code-extensions']}
     - {role: timeshift, tags: ['timeshift']}
     - {role: github-cli, tags: ['github-cli']}
     - {role: gnome-dash-to-dock, tags: ['gnome-dash-to-dock']}

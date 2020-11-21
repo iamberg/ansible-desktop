@@ -131,6 +131,8 @@ jobs:
         run: |
           make development-tools
           code --version
+      - name: Install Code extensions
+        run: make code-extensions
       - name: Web Browsers
         run: make web-browsers
 
